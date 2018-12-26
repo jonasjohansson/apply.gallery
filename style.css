@@ -1,0 +1,57 @@
+:root {
+	--base: 30px;
+}
+
+html {
+	font: 16px/1.2 BlinkMacSystemFont, system-ui, -apple-system;
+	letter-spacing: 0.006em;
+	color: black;
+	/*background: var(--grad-start) linear-gradient(var(--grad-start), var(--grad-end));*/
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+table,
+table * {
+	text-align: left;
+}
+
+.entry {
+	line-height: var(--base);
+}
+
+label {
+	float: left;
+	width: 100px;
+}
+
+progress {
+	width: 100%;
+	height: var(--base);
+	text-align: center;
+	color: white;
+	background-image: green;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+
+.dates {
+	position: absolute;
+	display: block;
+	z-index: 100;
+	color: white;
+	text-indent: 10px;
+	box-sizing: border-box;
+}
+
+progress::-webkit-progress-bar {
+	background: #bbb;
+}
+
+progress::-webkit-progress-value {
+	background: MediumSeaGreen;
+}

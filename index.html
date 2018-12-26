@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+	<main>
+		<section id="intro">
+			<h1>Ansökningar mm.</h1>
+			<p>A collectively created database displaying opportunities for artists.</p>
+		</section>
+		<section id="entries"></section>
+	</main>
+	<hr>
+	<form>
+		<div>
+			<label>Name</label>
+			<input type="text" name="name">
+		</div>
+		<div>
+			<label>Begins</label>
+			<input type="text" name="date-start">
+		</div>
+		<div>
+			<label>Ends</label>
+			<input type="text" name="date-end">
+		</div>
+		<div>
+			<label>URL</label>
+			<input type="text" name="url">
+		</div>
+		<button type="submit">Lägg till</button>
+	</form>
+	<script src="app.js"></script>
+	<script src="https://spreadsheets.google.com/feeds/list/1zceO0JqkSaR9xoogRG0W3p5-bnQ26WPmTQswwBbBwX0/od6/public/values?alt=json-in-script&callback=doData"></script>
+</body>
+</html>
