@@ -49,10 +49,10 @@ progress[value='100']::-webkit-progress-value {
 	background: Red;
 }
 
-progress[value='100']::-webkit-progress-bar {
-	opacity: 0.5;
-}
-
 progress::-webkit-progress-bar {
 	background: MediumSeaGreen;
+}
+
+progress.will-start::-webkit-progress-bar {
+	background: RoyalBlue;
 }

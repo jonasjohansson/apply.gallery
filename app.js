@@ -5,7 +5,7 @@ const url2 = `https://spreadsheets.google.com/feeds/list/${key}/od6/public/value
 const $form = document.querySelector('form');
 const $entries = document.querySelector('#entries');
 
-const now = new Date('2018/12/04');
+const now = new Date();
 const oneDay = 24 * 60 * 60 * 1000;
 const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
 
@@ -47,14 +47,6 @@ function doData(json) {
 		let $dates = document.createElement('span');
 		$dates.classList.add('dates');
 
-		let y1 = dateStart.getFullYear();
-		let m1 = dateStart.getMonth();
-		let d1 = dateStart.getDay();
-
-		let y2 = dateEnd.getFullYear();
-		let m2 = dateEnd.getMonth();
-		let d2 = dateEnd.getDay();
-
 		let dateStartLocale = dateStart.toLocaleDateString('sv-SE', options);
 		let dateEndLocale = dateEnd.toLocaleDateString('sv-SE', options);
 
@@ -63,6 +55,10 @@ function doData(json) {
 		let $progress = document.createElement('progress');
 		$progress.max = 100;
 		$progress.value = Math.round((dates[1] / dates[0]) * 100);
+
+		console.log(dateStart, now);
+
+		if (dateStart > now) $progress.classList.add('will-start');
 
 		$entry.appendChild($link);
 		$entry.appendChild($dates);
