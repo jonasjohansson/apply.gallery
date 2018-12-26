@@ -7,6 +7,7 @@ const $entries = document.querySelector('#entries');
 
 const now = new Date('2018/12/04');
 const oneDay = 24 * 60 * 60 * 1000;
+const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
 
 $form.addEventListener('submit', e => {
 	e.preventDefault();
@@ -28,13 +29,16 @@ function doData(json) {
 		$entry.classList.add('entry');
 		const name = row['gsx$name'].$t;
 		const url = row['gsx$url'].$t;
-		const dateStart = row['gsx$date-start'].$t;
-		const dateEnd = row['gsx$date-end'].$t;
-
-		let dates = getDays(dateStart, dateEnd);
+		let dateStart = row['gsx$date-start'].$t || 0;
+		let dateEnd = row['gsx$date-end'].$t;
 
 		$entry.setAttribute('data-start', dateStart);
 		$entry.setAttribute('data-end', dateEnd);
+
+		dateStart = new Date(dateStart);
+		dateEnd = new Date(dateEnd);
+
+		let dates = getDays(dateStart, dateEnd);
 
 		let $link = document.createElement('a');
 		$link.innerHTML = name;
@@ -42,11 +46,23 @@ function doData(json) {
 
 		let $dates = document.createElement('span');
 		$dates.classList.add('dates');
-		$dates.innerHTML = `${dateStart} - ${dateEnd}`;
+
+		let y1 = dateStart.getFullYear();
+		let m1 = dateStart.getMonth();
+		let d1 = dateStart.getDay();
+
+		let y2 = dateEnd.getFullYear();
+		let m2 = dateEnd.getMonth();
+		let d2 = dateEnd.getDay();
+
+		let dateStartLocale = dateStart.toLocaleDateString('sv-SE', options);
+		let dateEndLocale = dateEnd.toLocaleDateString('sv-SE', options);
+
+		$dates.innerHTML = `${dateStartLocale} - ${dateEndLocale}`;
 
 		let $progress = document.createElement('progress');
 		$progress.max = 100;
-		$progress.value = (dates[1] / dates[0]) * 100;
+		$progress.value = Math.round((dates[1] / dates[0]) * 100);
 
 		$entry.appendChild($link);
 		$entry.appendChild($dates);
@@ -66,8 +82,6 @@ serializeObject = data => {
 };
 
 const getDays = (a, b) => {
-	a = new Date(a);
-	b = new Date(b);
 	total = calc(b, a);
 	days = calc(now, a);
 	return [total, days];
