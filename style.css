@@ -88,6 +88,10 @@ a {
 	opacity: 0.5;
 }
 
+.date {
+	text-transform: capitalize;
+}
+
 .state {
 	right: 0;
 }
