@@ -1,25 +1,14 @@
-const sheetUrl = 'https://gsx2json.com/api?id=18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4&sheet=1';
-
 const now = new Date();
-// const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
 const options = { timeZone: 'UTC', weekday: 'short', month: 'numeric', day: 'numeric' };
 
-fetch(sheetUrl)
-	.then(function(response) {
-		return response.json();
-	})
-	.then(function(data) {
-		document.documentElement.classList.remove('loading');
-		doData(data);
-	});
+parseGSX('18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4');
 
-function doData(json) {
+function display(data) {
+	document.documentElement.classList.remove('loading');
 	const $entries = document.querySelector('#entries');
-	console.log(json.rows);
-	json.rows.sort(mysort);
+	data.sort(mysort);
 
-	console.log(json.rows);
-	for (let row of json.rows) {
+	for (let row of data) {
 		const data = {
 			name: row['name'],
 			org: row['organisation'] || '',
@@ -95,4 +84,24 @@ function mysort(a, b) {
 	a = new Date(a.start);
 	b = new Date(b.start);
 	return calc(now, a) - calc(now, b);
+}
+
+function parseGSX(spreadsheetID) {
+	var url = 'http://spreadsheets.google.com/feeds/list/' + spreadsheetID + '/1/public/values?alt=json';
+	var ajax = $.ajax(url);
+	$.when(ajax).then(parseRawData);
+}
+
+function parseRawData(res) {
+	var data = [];
+	res.feed.entry.forEach(function(entry) {
+		var parsedObject = {};
+		for (var key in entry) {
+			if (key.substring(0, 4) === 'gsx$') {
+				parsedObject[key.slice(4)] = entry[key]['$t'];
+			}
+		}
+		data.push(parsedObject);
+	});
+	display(data);
 }
