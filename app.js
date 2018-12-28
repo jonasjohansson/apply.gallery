@@ -47,7 +47,7 @@ function display(data) {
 			state = 'upcoming';
 		}
 
-		$entry.setAttribute('data-state', state);
+		$entry.classList.add(state);
 
 		$link.innerHTML = data.org !== '' ? `${data.org}: ${data.name}` : data.name;
 		$link.innerHTML = `<span>${$link.innerHTML}</span>`;

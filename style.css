@@ -1,5 +1,5 @@
 @import url('https://rawgit.com/jonasjohansson/template/master/reset.css');
-@import url('https://fonts.googleapis.com/css?family=Cabin|Poppins|Rubik|Playfair+Display|Space+Mono');
+@import url('https://fonts.googleapis.com/css?family=Rubik');
 
 :root {
 	--base: 24px;
@@ -29,6 +29,12 @@ body > div:first-of-type {
 	background-color: white;
 }
 
+h2 {
+	font-size: inherit;
+	font-weight: normal;
+	margin-bottom: -4px;
+}
+
 p:not(:last-child) {
 	margin-bottom: var(--base);
 }
@@ -37,20 +43,8 @@ p a {
 	font-weight: bold;
 }
 
-h2 {
-	font-size: inherit;
-	font-weight: normal;
-	margin-bottom: -4px;
-}
-
 a {
 	color: inherit;
-	/*text-decoration: none;*/
-}
-
-label {
-	float: left;
-	width: 100px;
 }
 
 /* entries, entry */
@@ -99,6 +93,8 @@ label {
 	right: 0;
 }
 
+/* progress */
+
 progress {
 	float: left;
 	width: 100%;
@@ -126,22 +122,24 @@ progress::-webkit-progress-bar {
 	background-color: inherit;
 }
 
-.entry:not([data-state='finished']) div {
+/* states */
+
+.entry:not(.finished) div {
 	mix-blend-mode: multiply;
 }
 
-.entry[data-state='finished'] div {
+.entry.finished div {
 	color: white;
 }
 
-.entry[data-state='upcoming'] progress::-webkit-progress-value {
+.entry.upcoming progress::-webkit-progress-value {
 	background-color: #f783ac;
 }
 
-.entry[data-state='ongoing'] progress::-webkit-progress-value {
+.entry.ongoing progress::-webkit-progress-value {
 	background-color: #54ab9f;
 }
 
-.entry[data-state='finished'] progress::-webkit-progress-bar {
+.entry.finished progress::-webkit-progress-bar {
 	background-color: #000;
 }
