@@ -87,7 +87,7 @@ function mysort(a, b) {
 }
 
 function parseGSX(spreadsheetID) {
-	var url = 'http://spreadsheets.google.com/feeds/list/' + spreadsheetID + '/1/public/values?alt=json';
+	var url = 'https://spreadsheets.google.com/feeds/list/' + spreadsheetID + '/1/public/values?alt=json';
 	var ajax = $.ajax(url);
 	$.when(ajax).then(parseRawData);
 }
