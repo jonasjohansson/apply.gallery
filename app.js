@@ -1,18 +1,24 @@
 const sheetUrl = 'http://gsx2json.com/api?id=18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4&sheet=1';
 
 const now = new Date();
-const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+// const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+const options = { timeZone: 'UTC', weekday: 'short', month: 'numeric', day: 'numeric' };
 
 fetch(sheetUrl)
 	.then(function(response) {
 		return response.json();
 	})
-	.then(function(myJson) {
-		doData(myJson);
+	.then(function(data) {
+		document.documentElement.classList.remove('loading');
+		doData(data);
 	});
 
 function doData(json) {
 	const $entries = document.querySelector('#entries');
+	console.log(json.rows);
+	json.rows.sort(mysort);
+
+	console.log(json.rows);
 	for (let row of json.rows) {
 		const data = {
 			name: row['name'],
@@ -28,66 +34,65 @@ function doData(json) {
 		const dateStart = new Date(data.start);
 		const dateEnd = new Date(data.end);
 
-		if (dateEnd < dateStart) return;
-
 		const totalDays = calc(dateEnd, dateStart);
-		const daysRemaining = calc(now, dateStart);
+		const daysRemaining = calc(dateEnd, now);
 
 		let dateStartLocale = dateStart.toLocaleDateString('sv-SE', options);
 		let dateEndLocale = dateEnd.toLocaleDateString('sv-SE', options);
 
-		// $dates.innerHTML = `${dateStartLocale} - ${dateEndLocale}`;
-
 		const $entry = document.createElement('div');
 		const $link = document.createElement('a');
-		const $dates = document.createElement('div');
-		const $status = document.createElement('div');
+		const $date = document.createElement('div');
+		const $state = document.createElement('div');
 		const $progress = document.createElement('progress');
 
 		$entry.classList.add('entry');
-		$dates.classList.add('dates');
-		$status.classList.add('status');
+		$date.classList.add('date');
+		$state.classList.add('state');
 
 		if (now > dateEnd) {
-			$entry.classList.add('finished');
+			state = 'finished';
 		} else if (now > dateStart) {
-			$entry.classList.add('ongoing');
+			state = 'ongoing';
 		} else {
-			$entry.classList.add('upcoming');
+			state = 'upcoming';
 		}
 
-		$link.innerHTML = data.name;
-		$link.href = data.link;
+		$entry.setAttribute('data-state', state);
 
-		$entry.setAttribute('data-start', dateStart);
-		$entry.setAttribute('data-end', dateEnd);
-		$entry.setAttribute('data-left', daysRemaining);
-		$entry.setAttribute('data-days', calc(dateEnd, now));
+		$link.innerHTML = data.org !== '' ? `${data.org}: ${data.name}` : data.name;
+		$link.innerHTML = `<span>${$link.innerHTML}</span>`;
+		$link.href = data.link;
+		$date.innerHTML = `${dateStartLocale} - ${dateEndLocale}`;
+		if (daysRemaining === 0) {
+			$state.innerHTML = 'last day';
+		} else {
+			$state.innerHTML = state == 'ongoing' ? `${daysRemaining + 1} days left` : state;
+		}
 
 		$progress.max = 100;
 		$progress.value = Math.round((daysRemaining / totalDays) * 100);
 
 		$entry.appendChild($link);
-		$entry.appendChild($dates);
-		$entry.appendChild($status);
+		$entry.appendChild($date);
+		$entry.appendChild($state);
 		$entry.appendChild($progress);
 		$entries.appendChild($entry);
 	}
-}
 
-serializeObject = data => {
-	var formData = new FormData(data);
-	var object = {};
-	formData.forEach(function(value, key) {
-		object[key] = value;
-	});
-	return object;
-};
+	for (let a of document.querySelectorAll('a')) a.target = '_blank';
+}
 
 function calc(a, b) {
 	oneDay = 24 * 60 * 60 * 1000;
 	a = a.getTime();
 	b = b.getTime();
 	val = (a - b) / oneDay;
-	return Math.round(val);
+	return Math.ceil(val);
+}
+
+function mysort(a, b) {
+	a = new Date(a.start);
+	b = new Date(b.start);
+	return calc(now, a) - calc(now, b);
 }

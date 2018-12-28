@@ -1,12 +1,46 @@
+@import url('https://rawgit.com/jonasjohansson/template/master/reset.css');
+@import url('https://fonts.googleapis.com/css?family=Cabin|Poppins|Rubik|Playfair+Display|Space+Mono');
+
 :root {
-	--base: 30px;
+	--base: 24px;
+	--gutter: 12px;
 }
 
 html {
-	font: 16px/1.2 BlinkMacSystemFont, system-ui, -apple-system;
+	font: 15px/1.2 'Rubik', BlinkMacSystemFont, system-ui, -apple-system;
 	letter-spacing: 0.006em;
-	color: black;
-	/*background: var(--grad-start) linear-gradient(var(--grad-start), var(--grad-end));*/
+	background-color: #eee;
+	color: #222;
+	transition: opacity 400ms ease-in-out;
+	will-change: opacity;
+	opacity: 1;
+}
+
+html.loading {
+	opacity: 0;
+}
+
+body > div {
+	padding: var(--base);
+	box-sizing: border-box;
+}
+
+body > div:first-of-type {
+	background-color: white;
+}
+
+p:not(:last-child) {
+	margin-bottom: var(--base);
+}
+
+p a {
+	font-weight: bold;
+}
+
+h2 {
+	font-size: inherit;
+	font-weight: normal;
+	margin-bottom: -4px;
 }
 
 a {
@@ -19,46 +53,96 @@ label {
 	width: 100px;
 }
 
+/* entries, entry */
+
 .entry {
+	position: relative;
 	line-height: var(--base);
 }
 
-.dates {
+.entry:not(:last-child) {
+	margin-bottom: var(--gutter);
+}
+
+.entry:after {
+	content: '';
+	display: block;
+	clear: both;
+}
+
+.entry a {
+	width: 100%;
+	display: inline-block;
+	font-size: inherit;
+	white-space: nowrap;
+}
+
+.entry a span {
+	bottom: -8px;
+	display: block;
+	position: relative;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.date,
+.state {
 	position: absolute;
 	display: block;
-	z-index: 100;
-	color: white;
-	text-indent: 10px;
 	box-sizing: border-box;
 	text-transform: capitalize;
+	padding: 0 var(--gutter);
+	line-height: calc(var(--base) * 2);
+	opacity: 0.5;
+}
+
+.state {
+	right: 0;
 }
 
 progress {
+	float: left;
 	width: 100%;
-	height: var(--base);
+	height: calc(var(--base) * 2);
 	text-align: center;
-	color: white;
-	background-image: green;
+	background-color: #cccccc;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
 }
 
+progress,
 progress::-webkit-progress-value,
-progress[value='100']::-webkit-progress-value {
-	background: Red;
+progress::-webkit-progress-bar {
+	border-radius: calc(var(--gutter) / 3);
 }
 
 progress:after {
-	content: attr(days-left);
+	content: '';
 	display: block;
-	color: black;
+	clear: both;
 }
 
 progress::-webkit-progress-bar {
-	background: MediumSeaGreen;
+	background-color: inherit;
 }
 
-progress.will-start::-webkit-progress-bar {
-	background: RoyalBlue;
+.entry:not([data-state='finished']) div {
+	mix-blend-mode: multiply;
+}
+
+.entry[data-state='finished'] div {
+	color: white;
+}
+
+.entry[data-state='upcoming'] progress::-webkit-progress-value {
+	background-color: #f783ac;
+}
+
+.entry[data-state='ongoing'] progress::-webkit-progress-value {
+	background-color: #54ab9f;
+}
+
+.entry[data-state='finished'] progress::-webkit-progress-bar {
+	background-color: #000;
 }
