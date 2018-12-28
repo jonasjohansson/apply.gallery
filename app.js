@@ -39,24 +39,25 @@ function display(data) {
 		$date.classList.add('date');
 		$state.classList.add('state');
 
-		if (now > dateEnd) {
-			state = 'finished';
-		} else if (now > dateStart) {
-			state = 'ongoing';
-		} else {
-			state = 'upcoming';
-		}
-
-		$entry.classList.add(state);
-
 		$link.innerHTML = data.org !== '' ? `${data.org}: ${data.name}` : data.name;
 		$link.innerHTML = `<span>${$link.innerHTML}</span>`;
 		$link.href = data.link;
 		$date.innerHTML = `${dateStartLocale} - ${dateEndLocale}`;
-		if (daysRemaining === 0) {
-			$state.innerHTML = 'last day';
+
+		if (now > dateEnd) {
+			$entry.classList.add('finished');
+			$state.innerHTML = 'avslutad';
+		} else if (now > dateStart) {
+			$entry.classList.add('running');
+			$state.innerHTML = `${daysRemaining + 1}`;
+			if (daysRemaining > 1) {
+				$state.innerHTML += ' dagar kvar';
+			} else {
+				$state.innerHTML += ' dag kvar';
+			}
 		} else {
-			$state.innerHTML = state == 'ongoing' ? `${daysRemaining + 1} days left` : state;
+			$entry.classList.add('upcoming');
+			$state.innerHTML = 'kommande';
 		}
 
 		$progress.max = 100;
