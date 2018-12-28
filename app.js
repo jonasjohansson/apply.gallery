@@ -1,4 +1,4 @@
-const sheetUrl = 'http://gsx2json.com/api?id=18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4&sheet=1';
+const sheetUrl = 'https://gsx2json.com/api?id=18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4&sheet=1';
 
 const now = new Date();
 // const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
