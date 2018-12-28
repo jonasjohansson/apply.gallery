@@ -49,6 +49,12 @@ progress[value='100']::-webkit-progress-value {
 	background: Red;
 }
 
+progress:after {
+	content: attr(days-left);
+	display: block;
+	color: black;
+}
+
 progress::-webkit-progress-bar {
 	background: MediumSeaGreen;
 }

@@ -1,69 +1,76 @@
-const url = 'https://script.google.com/macros/s/AKfycbxuJ_DJpyx9r04Uz2yaXrlbjyVI6649WngvDC5H8McuGEik3hw_/exec';
-const key = '1zceO0JqkSaR9xoogRG0W3p5-bnQ26WPmTQswwBbBwX0';
-const url2 = `https://spreadsheets.google.com/feeds/list/${key}/od6/public/values?alt=json-in-script&callback=doData`;
-
-const $form = document.querySelector('form');
-const $entries = document.querySelector('#entries');
+const sheetUrl = 'http://gsx2json.com/api?id=18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4&sheet=1';
 
 const now = new Date();
-const oneDay = 24 * 60 * 60 * 1000;
 const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
 
-$form.addEventListener('submit', e => {
-	e.preventDefault();
-	$.ajax({
-		url: url,
-		method: 'GET',
-		dataType: 'json',
-		data: serializeObject($form),
-		success: function(data) {
-			console.log(data);
-		}
+fetch(sheetUrl)
+	.then(function(response) {
+		return response.json();
+	})
+	.then(function(myJson) {
+		doData(myJson);
 	});
-});
 
 function doData(json) {
-	let entries = json.feed.entry;
-	for (let row of entries) {
-		let $entry = document.createElement('div');
-		$entry.classList.add('entry');
-		const name = row['gsx$name'].$t;
-		const url = row['gsx$url'].$t;
-		let dateStart = row['gsx$date-start'].$t || 0;
-		let dateEnd = row['gsx$date-end'].$t;
+	const $entries = document.querySelector('#entries');
+	for (let row of json.rows) {
+		const data = {
+			name: row['name'],
+			org: row['organisation'] || '',
+			link: row['link'],
+			country: row['country'],
+			start: row['start'],
+			end: row['end']
+		};
 
-		$entry.setAttribute('data-start', dateStart);
-		$entry.setAttribute('data-end', dateEnd);
+		if (data.link === '') data.link = `http://www.google.com/search?q=${data.org} ${data.name}`;
 
-		dateStart = new Date(dateStart);
-		dateEnd = new Date(dateEnd);
+		const dateStart = new Date(data.start);
+		const dateEnd = new Date(data.end);
 
-		let dates = getDays(dateStart, dateEnd);
+		if (dateEnd < dateStart) return;
 
-		let $link = document.createElement('a');
-		$link.innerHTML = name;
-		$link.href = url;
-
-		let $dates = document.createElement('span');
-		$dates.classList.add('dates');
+		const totalDays = calc(dateEnd, dateStart);
+		const daysRemaining = calc(now, dateStart);
 
 		let dateStartLocale = dateStart.toLocaleDateString('sv-SE', options);
 		let dateEndLocale = dateEnd.toLocaleDateString('sv-SE', options);
 
-		$dates.innerHTML = `${dateStartLocale} - ${dateEndLocale}`;
+		// $dates.innerHTML = `${dateStartLocale} - ${dateEndLocale}`;
 
-		let $progress = document.createElement('progress');
+		const $entry = document.createElement('div');
+		const $link = document.createElement('a');
+		const $dates = document.createElement('div');
+		const $status = document.createElement('div');
+		const $progress = document.createElement('progress');
+
+		$entry.classList.add('entry');
+		$dates.classList.add('dates');
+		$status.classList.add('status');
+
+		if (now > dateEnd) {
+			$entry.classList.add('finished');
+		} else if (now > dateStart) {
+			$entry.classList.add('ongoing');
+		} else {
+			$entry.classList.add('upcoming');
+		}
+
+		$link.innerHTML = data.name;
+		$link.href = data.link;
+
+		$entry.setAttribute('data-start', dateStart);
+		$entry.setAttribute('data-end', dateEnd);
+		$entry.setAttribute('data-left', daysRemaining);
+		$entry.setAttribute('data-days', calc(dateEnd, now));
+
 		$progress.max = 100;
-		$progress.value = Math.round((dates[1] / dates[0]) * 100);
-
-		console.log(dateStart, now);
-
-		if (dateStart > now) $progress.classList.add('will-start');
+		$progress.value = Math.round((daysRemaining / totalDays) * 100);
 
 		$entry.appendChild($link);
 		$entry.appendChild($dates);
+		$entry.appendChild($status);
 		$entry.appendChild($progress);
-
 		$entries.appendChild($entry);
 	}
 }
@@ -77,14 +84,10 @@ serializeObject = data => {
 	return object;
 };
 
-const getDays = (a, b) => {
-	total = calc(b, a);
-	days = calc(now, a);
-	return [total, days];
-};
-
 function calc(a, b) {
+	oneDay = 24 * 60 * 60 * 1000;
 	a = a.getTime();
 	b = b.getTime();
-	return Math.round((a - b) / oneDay);
+	val = (a - b) / oneDay;
+	return Math.round(val);
 }
