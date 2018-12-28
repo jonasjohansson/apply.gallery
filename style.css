@@ -78,7 +78,6 @@ label {
 }
 
 .entry a span {
-	bottom: -8px;
 	display: block;
 	position: relative;
 	text-overflow: ellipsis;
