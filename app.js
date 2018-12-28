@@ -1,5 +1,5 @@
 const now = new Date();
-const options = { timeZone: 'UTC', weekday: 'short', month: 'numeric', day: 'numeric' };
+const options = { timeZone: 'Europe/Stockholm', weekday: 'short', month: 'numeric', day: 'numeric' };
 
 parseGSX('18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4');
 
@@ -78,7 +78,7 @@ function calc(a, b) {
 	a = a.getTime();
 	b = b.getTime();
 	val = (a - b) / oneDay;
-	return Math.ceil(val);
+	return Math.round(val);
 }
 
 function mysort(a, b) {
