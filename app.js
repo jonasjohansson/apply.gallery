@@ -7,6 +7,7 @@ function display(data) {
 	document.documentElement.classList.remove('loading');
 	const $entries = document.querySelector('#entries');
 	data.sort(mysort);
+	data.reverse();
 
 	for (let row of data) {
 		const data = {
@@ -82,9 +83,26 @@ function calc(a, b) {
 }
 
 function mysort(a, b) {
-	a = new Date(a.start);
-	b = new Date(b.start);
-	return calc(now, a) - calc(now, b);
+	as = new Date(a.start);
+	bs = new Date(b.start);
+	ae = new Date(a.end);
+	be = new Date(b.end);
+
+	if (now > ae) a.state = 0;
+	// finished
+	else if (now < as) a.state = 1;
+	// incoming
+	else a.state = 2; // running
+
+	if (now > be) b.state = 0;
+	else if (now < bs) b.state = 1;
+	else b.state = 2;
+
+	if (a.state > b.state) return 1;
+	if (a.state < b.state) return -1;
+
+	if (as > bs) return 1;
+	if (as < bs) return -1;
 }
 
 function parseGSX(spreadsheetID) {
