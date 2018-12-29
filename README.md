@@ -17,3 +17,4 @@ Kistefos Museum, Norway – http://www.kistefos.museum.no/index.php?groupid=184&
 Arte Sella, Italia – http://www.artesella.it
 SMACH – https://www.smach.it
 http://speculativepropositions.tumblr.com/
+https://fine-art.education/14-larare-tips-ansokan-konstskolor-designskolor/
