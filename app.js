@@ -43,13 +43,12 @@ function display(data) {
 		$link.innerHTML = data.org !== '' ? `${data.org}: ${data.name}` : data.name;
 		$link.innerHTML = `<span>${$link.innerHTML}</span>`;
 		$link.href = data.link;
-		$date.innerHTML = `${dateStartLocale} - ${dateEndLocale}`;
 
 		if (now > dateEnd) {
-			$entry.classList.add('finished');
+			data.state = 'finished';
 			$state.innerHTML = 'avslutad';
 		} else if (now > dateStart) {
-			$entry.classList.add('running');
+			data.state = 'running';
 			$state.innerHTML = `${daysRemaining + 1}`;
 			if (daysRemaining > 1) {
 				$state.innerHTML += ' dagar kvar';
@@ -57,9 +56,13 @@ function display(data) {
 				$state.innerHTML += ' dag kvar';
 			}
 		} else {
-			$entry.classList.add('upcoming');
+			data.state = 'upcoming';
 			$state.innerHTML = 'kommande';
 		}
+
+		$date.innerHTML = `${dateStartLocale} - ${dateEndLocale}`;
+
+		$entry.classList.add(data.state);
 
 		$progress.max = 100;
 		$progress.value = Math.round((daysRemaining / totalDays) * 100);
