@@ -1,5 +1,5 @@
 const now = new Date();
-const options = { timeZone: 'Europe/Stockholm', weekday: 'short', month: 'numeric', day: 'numeric' };
+const options = { timeZone: 'Europe/Stockholm', weekday: 'short', month: 'short', day: 'numeric' };
 
 parseGSX('18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4');
 
