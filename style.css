@@ -2,26 +2,26 @@
 @import url('https://fonts.googleapis.com/css?family=Rubik');
 
 :root {
-	--base: 24px;
-	--gutter: 12px;
+    --base: 24px;
+    --gutter: 12px;
 }
 
 html {
-	font: 15px/1.3 'Rubik', BlinkMacSystemFont, system-ui, -apple-system;
-	letter-spacing: 0.006em;
-	color: #222;
-	transition: opacity 400ms ease-in-out;
-	will-change: opacity;
-	opacity: 1;
+    font: 14px/1.3 'Rubik', BlinkMacSystemFont, system-ui, -apple-system;
+    letter-spacing: 0.006em;
+    color: #222;
+    transition: opacity 400ms ease-in-out;
+    will-change: opacity;
+    opacity: 1;
 }
 
 html.loading {
-	opacity: 0;
+    opacity: 0;
 }
 
 body > div {
-	padding: var(--base);
-	box-sizing: border-box;
+    padding: var(--base);
+    box-sizing: border-box;
 }
 
 body > div:first-of-type,
@@ -29,127 +29,139 @@ body > div:last-of-type {
 }
 
 h2 {
-	font-size: inherit;
-	font-weight: normal;
-	margin-bottom: -4px;
+    font-size: inherit;
+    font-weight: normal;
+    margin-bottom: -4px;
 }
 
 p:not(:last-child) {
-	margin-bottom: var(--base);
+    margin-bottom: var(--base);
 }
 
 p a {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 a {
-	color: inherit;
+    color: inherit;
 }
 
 /* entries, entry */
 
 #entries {
-	background-color: #eee;
+    background-color: #eee;
 }
 
 .entry {
-	position: relative;
-	line-height: var(--base);
+    position: relative;
+    line-height: var(--base);
 }
 
 .entry:not(:last-child) {
-	margin-bottom: var(--gutter);
+    margin-bottom: var(--gutter);
 }
 
 .entry:after {
-	content: '';
-	display: block;
-	clear: both;
+    content: '';
+    display: block;
+    clear: both;
 }
 
 .entry a {
-	width: 100%;
-	display: inline-block;
-	font-size: inherit;
-	white-space: nowrap;
+    width: 100%;
+    display: inline-block;
+    font-size: inherit;
+    white-space: nowrap;
 }
 
 .entry a span {
-	display: block;
-	position: relative;
-	text-overflow: ellipsis;
-	overflow: hidden;
+    display: block;
+    position: relative;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .date,
 .state {
-	position: absolute;
-	display: block;
-	box-sizing: border-box;
-	padding: 0 var(--gutter);
-	line-height: calc(var(--base) * 2);
-	opacity: 0.5;
+    position: absolute;
+    display: block;
+    box-sizing: border-box;
+    padding: 0 var(--gutter);
+    line-height: calc(var(--base) * 2);
+    opacity: 0.5;
 }
 
 .date {
-	text-transform: capitalize;
+    text-transform: capitalize;
 }
 
 .state {
-	right: 0;
+    right: 0;
 }
 
 .state:first-letter {
-	text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 /* progress */
 
 progress {
-	float: left;
-	width: 100%;
-	height: calc(var(--base) * 2);
-	text-align: center;
-	background-color: #ddd;
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
+    float: left;
+    width: 100%;
+    height: calc(var(--base) * 2);
+    text-align: center;
+    background-color: #ddd;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 progress,
 progress::-webkit-progress-value,
 progress::-webkit-progress-bar {
-	border-radius: calc(var(--gutter) / 3);
+    border-radius: calc(var(--gutter) / 3);
 }
 
 progress:after {
-	content: '';
-	display: block;
-	clear: both;
+    content: '';
+    display: block;
+    clear: both;
 }
 
 progress::-webkit-progress-bar {
-	background-color: inherit;
+    background-color: inherit;
+}
+
+/* on small */
+
+@media (max-width: 699px) {
+    .state {
+        display: none;
+    }
 }
 
 /* states */
 
-.entry:not(.finished) div {
-	mix-blend-mode: multiply;
+.entry:not(.closed) div {
+    mix-blend-mode: multiply;
 }
 
-.entry.finished div {
-	color: white;
+.entry.closed div {
+    color: white;
 }
 
 .entry.upcoming progress::-webkit-progress-value {
-	background-color: mediumslateblue; #f783ac;
+    background-color: mediumslateblue;
 }
 
-.entry.running progress::-webkit-progress-value {
-	background-color: springgreen; #54ab9f;
+.entry.active progress::-webkit-progress-value {
+    background-color: springgreen;
 }
 
-.entry.finished progress::-webkit-progress-bar {
-	background-color: #000;
+.entry.closed progress::-webkit-progress-bar {
+    background-color: #000;
+}
+
+.entry.closed {
+    opacity: 0.4;
 }

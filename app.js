@@ -1,5 +1,5 @@
 const now = new Date();
-const options = { timeZone: 'Europe/Stockholm', weekday: 'short', month: 'short', day: 'numeric' };
+const options = { timeZone: 'Europe/Stockholm', year: 'numeric', weekday: 'short', month: 'short', day: 'numeric' };
 
 parseGSX('18tEz0O6i5M51t3EOSG1L5MOa7ofbzJR1awIQbPjAtV4');
 
@@ -45,10 +45,10 @@ function display(data) {
 		$link.href = data.link;
 
 		if (now > dateEnd) {
-			data.state = 'finished';
+			data.state = 'closed';
 			$state.innerHTML = 'avslutad';
 		} else if (now > dateStart) {
-			data.state = 'running';
+			data.state = 'active';
 			$state.innerHTML = `${daysRemaining + 1}`;
 			if (daysRemaining > 1) {
 				$state.innerHTML += ' dagar kvar';
@@ -92,10 +92,10 @@ function mysort(a, b) {
 	be = new Date(b.end);
 
 	if (now > ae) a.state = 0;
-	// finished
+	// closed
 	else if (now < as) a.state = 1;
-	// incoming
-	else a.state = 2; // running
+	// upcoming
+	else a.state = 2; // active
 
 	if (now > be) b.state = 0;
 	else if (now < bs) b.state = 1;
